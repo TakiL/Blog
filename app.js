@@ -26,7 +26,7 @@ app.use(
 );
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://80.249.163.147:32770/db_blog", {
+mongoose.connect("mongodb://MongoDev:27017/db_blog", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -138,6 +138,6 @@ app.get("/posts/:postId", function (req, res) {
 
 // });
 
-app.listen(3000, function () {
+app.listen(3001, function () {
   console.log("Server started on port 3000");
 });
