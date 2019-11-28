@@ -56,7 +56,7 @@ app.get("/", function (req, res) {
       startingContent: homeStartingContent,
       posts: posts
     });
-    console.log(posts);
+
   });
 });
 
