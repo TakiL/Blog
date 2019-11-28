@@ -26,7 +26,7 @@ app.use(
 );
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://MongoDev:27017/db_blog", {
+mongoose.connect("mongodb://80.249.163.147:32770/db_blog", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -72,12 +72,50 @@ app.get("/contact", function (req, res) {
   });
 });
 
-app.get("/compose", function (req, res) {
-  res.render("compose");
+app.get("/login", function (req, res) {
+  res.render("login");
 });
 
-// app.post("/register", function(req,res){
-//   bcrypt.hash(req.body.password, saltRound, function(err, result))
+
+//////////////////////////////////////////////Register page
+// app.get("/register", function (req, res) {
+//   res.render("register")
+// });
+
+
+
+//To login
+app.post("/login", function (req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+  User.findOne({
+    email: username
+  }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        bcrypt.compare(password, foundUser.password, function (err, result) {
+          if (result === true) {
+            res.render("compose");
+          }
+        })
+      }
+    }
+  })
+})
+
+
+//To register
+// app.post("/register", function (req, res) {
+//   bcrypt.hash(req.body.password, saltRound, function (err, result) {
+//     const newUser = new User({
+//       email: req.body.username,
+//       password: result
+//     })
+//     newUser.save()
+//     res.redirect("/");
+//   })
 // })
 
 app.post("/compose", function (req, res) {
@@ -122,6 +160,22 @@ app.get("/posts/:postId", function (req, res) {
   );
 });
 
+app.delete("/posts/:postName", function (req, res) {
+  const postName = req.params.postName;
+  Post.deleteMany({
+      title: postName
+    },
+
+    function (err) {
+      if (err) {
+        console.log(err)
+      } else {
+        res.send("Post has been deleted")
+      }
+    });
+
+})
+
 // app.get("/posts/:postId", function (req, res) {
 //   const requestedTitle = _.lowerCase(req.params.postName);
 
@@ -139,5 +193,5 @@ app.get("/posts/:postId", function (req, res) {
 // });
 
 app.listen(3001, function () {
-  console.log("Server started on port 3000");
+  console.log("Server started on port 3001");
 });
