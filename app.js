@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRound = 10;
 
 const homeStartingContent =
@@ -50,8 +50,8 @@ const User = mongoose.model("User", userSchema);
 // });
 // testPost.save();
 
-app.get("/", function(req, res) {
-  Post.find({}, function(err, posts) {
+app.get("/", function (req, res) {
+  Post.find({}, function (err, posts) {
     res.render("home", {
       startingContent: homeStartingContent,
       posts: posts
@@ -60,19 +60,19 @@ app.get("/", function(req, res) {
   });
 });
 
-app.get("/about", function(req, res) {
+app.get("/about", function (req, res) {
   res.render("about", {
     aboutContent: aboutContent
   });
 });
 
-app.get("/contact", function(req, res) {
+app.get("/contact", function (req, res) {
   res.render("contact", {
     contactContent: contactContent
   });
 });
 
-app.get("/compose", function(req, res) {
+app.get("/compose", function (req, res) {
   res.render("compose");
 });
 
@@ -80,7 +80,7 @@ app.get("/compose", function(req, res) {
 //   bcrypt.hash(req.body.password, saltRound, function(err, result))
 // })
 
-app.post("/compose", function(req, res) {
+app.post("/compose", function (req, res) {
   // console.log(req.body.postTitle, req.body.postBody)
   const postTitle = req.body.postTitle;
   const postBody = req.body.postBody;
@@ -90,7 +90,7 @@ app.post("/compose", function(req, res) {
     content: postBody
   });
 
-  post.save(function(err) {
+  post.save(function (err) {
     if (!err) {
       res.redirect("/");
     }
@@ -106,13 +106,12 @@ app.post("/compose", function(req, res) {
   res.redirect("/");
 });
 
-app.get("/posts/:postId", function(req, res) {
+app.get("/posts/:postId", function (req, res) {
   const idOfPost = req.params.postId;
-  Post.findOne(
-    {
+  Post.findOne({
       _id: idOfPost
     },
-    function(err, wantedList) {
+    function (err, wantedList) {
       if (!err) {
         res.render("post", {
           title: wantedList.title,
@@ -139,6 +138,6 @@ app.get("/posts/:postId", function(req, res) {
 
 // });
 
-app.listen(3000, function() {
+app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
